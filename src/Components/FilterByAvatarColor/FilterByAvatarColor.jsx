@@ -1,20 +1,29 @@
-import { useSelector } from "react-redux";
-import { getFilteredGroups, selectPrivateType } from "../../redux/GroupSlice";
+import { useDispatch, useSelector } from "react-redux";
 import style from "./FilterByAvatarColor.module.css";
+import { selectColor, getFilteredGroups } from "../../redux/GroupSlice";
 
 export const FilterByAvatarColor = () => {
-  const colors = Array.from(
-    new Set(
-      useSelector(state => state.groups.groups)
-        .map(group => group.avatar_color)
-        .filter(color => color !== undefined)
-    )
-  );
+  const dispatch = useDispatch();
+
+  const colors = useSelector(state => state.groups.colors);
 
   return (
     <div>
       <h2>By Avatar Color </h2>
-      <select>
+      <button
+        onClick={() => {
+          dispatch(selectColor({ state: false, condition: false }));
+          dispatch(getFilteredGroups());
+        }}
+      >
+        Любая
+      </button>
+      <select
+        onChange={e => {
+          dispatch(selectColor({ state: true, condition: e.target.value }));
+          dispatch(getFilteredGroups());
+        }}
+      >
         {colors.map(color => (
           <option>{color}</option>
         ))}

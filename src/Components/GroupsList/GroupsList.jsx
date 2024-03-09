@@ -9,9 +9,11 @@ export const GroupsList = ({ groups }) => {
       <PanelHeader>Задание ВК </PanelHeader>
       <Filters />
       <ul className={style.groups}>
-        {groups.map(group => (
-          <GroupsElem {...group} />
-        ))}
+        {groups.length === 0 ? (
+          <h1>По результам запроса ничего не найдено</h1>
+        ) : (
+          groups.map(group => <GroupsElem {...group} />)
+        )}
       </ul>
     </Panel>
   );
