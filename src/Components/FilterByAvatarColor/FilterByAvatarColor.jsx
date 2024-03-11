@@ -24,8 +24,8 @@ export const FilterByAvatarColor = () => {
           dispatch(getFilteredGroups());
         }}
       >
-        {colors.map(color => (
-          <option>{color}</option>
+        {colors.map((color, index) => (
+          <option key={index}>{color}</option>
         ))}
       </select>
     </div>

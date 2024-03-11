@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import groupsData from "../groups.json";
 
 const GroupSlice = createSlice({
   name: "groups",
@@ -21,7 +20,12 @@ const GroupSlice = createSlice({
         new Set(
           action.payload
             .map(group => group.avatar_color)
-            .filter(color => color !== undefined)
+            .map(color => {
+              if (color === undefined) {
+                return "Нет аватарки";
+              }
+              return color;
+            })
         )
       );
     },
@@ -41,10 +45,16 @@ const GroupSlice = createSlice({
         );
       }
       if (state.filterParams.byAvatarColor.state) {
-        state.groups = state.groups.filter(
-          group =>
-            group.avatar_color === state.filterParams.byAvatarColor.condition
-        );
+        if (state.filterParams.byAvatarColor.condition === "Нет аватарки") {
+          state.groups = state.groups.filter(
+            group => group.avatar_color === undefined
+          );
+        } else {
+          state.groups = state.groups.filter(
+            group =>
+              group.avatar_color === state.filterParams.byAvatarColor.condition
+          );
+        }
       }
       if (state.filterParams.byFriends.state) {
         if (state.filterParams.byFriends.condition === false) {

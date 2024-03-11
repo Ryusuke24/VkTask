@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import json from "./groups.json";
 import "./App.css";
-import { GroupsList } from "./Components/GroupsList/GroupsList";
+import { MainPanel } from "./Components/MainPanel/MainPanel";
 import { useDispatch, useSelector } from "react-redux";
 import { getGroups } from "./redux/GroupSlice";
 
@@ -11,16 +11,20 @@ function App() {
   const groups = useSelector(state => state.groups.groups);
   const dispatch = useDispatch();
   const [isError, setError] = useState(null);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     let timerId;
     setError(null);
+    setLoading(true);
     if (GetGroupsResponce.result) {
       timerId = setTimeout(() => {
         dispatch(getGroups(GetGroupsResponce.data));
+        setLoading(false);
       }, 1000);
     } else {
       setError("Fetching error");
+      setLoading(false);
     }
 
     return () => {
@@ -33,7 +37,7 @@ function App() {
   }
   return (
     <>
-      <GroupsList groups={groups} />
+      <MainPanel groups={groups} isLoading={isLoading} />
     </>
   );
 }
